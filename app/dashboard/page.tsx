@@ -1,6 +1,6 @@
 "use client";
 
-import { Database, Mail, Image, Mic, MessageSquare, Search, Layers, Activity } from "lucide-react";
+import { Database, Mail, Image, Mic, MessageSquare, Search, Layers, Activity, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { StatCard } from "@/components/stat-card";
@@ -32,17 +32,17 @@ export default function DashboardHome() {
   const { toast } = useToast();
 
   const systems = [
-    { number: "01", title: "Property Database", stat: "3,000 properties", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/database" },
-    { number: "02", title: "Follow-ups", stat: "$4.2M recovered", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/followups" },
-    { number: "03", title: "AI Staging", stat: "12 staged", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/staging" },
-    { number: "04", title: "Voice to CRM", stat: "47 notes", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/voice" },
-    { number: "05", title: "AI Assistant", stat: "Always on", status: "Ready", statusColor: "bg-blue-400", href: "/dashboard/assistant" },
+    { number: "01", title: "Property Database", stat: "3,000 properties", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/database", locked: false },
+    { number: "02", title: "Follow-ups", stat: "$4.2M recovered", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/followups", locked: false },
+    { number: "03", title: "AI Staging", stat: "—", status: "Future", statusColor: "bg-gray-300", href: "/dashboard/staging", locked: true },
+    { number: "04", title: "Voice to CRM", stat: "—", status: "Future", statusColor: "bg-gray-300", href: "/dashboard/voice", locked: true },
+    { number: "05", title: "AI Assistant", stat: "—", status: "Future", statusColor: "bg-gray-300", href: "/dashboard/assistant", locked: true },
   ];
 
   const quickActions = [
     { label: "Clean Database", icon: Database, action: () => toast("Database cleanup batch started...", "info") },
     { label: "Send Follow-ups", icon: Mail, action: () => toast("Sending follow-up sequences...", "info") },
-    { label: "Stage Property", icon: Image, action: () => toast("AI staging initiated...", "info") },
+    { label: "Export Excel", icon: Database, action: () => toast("Excel export started...", "info") },
     { label: "Architecture", icon: Layers, action: () => router.push("/dashboard/architecture") },
   ];
 
@@ -58,7 +58,7 @@ export default function DashboardHome() {
         >
           <div>
             <h1 className="text-[28px] font-bold tracking-tight text-[#0F1117]">Good morning, Maha.</h1>
-            <p className="text-sm text-[#9B9BA8] mt-1">Your 5 AI systems at a glance.</p>
+            <p className="text-sm text-[#9B9BA8] mt-1">Your database and pipeline at a glance.</p>
           </div>
           <p className="text-sm text-[#9B9BA8] hidden sm:block">February 27, 2026</p>
         </motion.div>
@@ -72,7 +72,10 @@ export default function DashboardHome() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + i * 0.06, duration: 0.3 }}
               onClick={() => router.push(sys.href)}
-              className="card-premium-hover p-4 flex items-center gap-3 text-left"
+              className={cn(
+                "card-premium-hover p-4 flex items-center gap-3 text-left",
+                sys.locked && "opacity-40"
+              )}
             >
               <span className="text-2xl font-bold text-[#1B3A5C]/20">{sys.number}</span>
               <div className="flex-1 min-w-0">
@@ -80,7 +83,11 @@ export default function DashboardHome() {
                 <p className="text-xs text-[#9B9BA8]">{sys.stat}</p>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className={cn("size-1.5 rounded-full animate-pulse", sys.statusColor)} />
+                {sys.locked ? (
+                  <Lock className="size-3 text-[#9B9BA8]" />
+                ) : (
+                  <span className={cn("size-1.5 rounded-full animate-pulse", sys.statusColor)} />
+                )}
                 <span className="text-[10px] text-[#9B9BA8]">{sys.status}</span>
               </div>
             </motion.button>
@@ -92,7 +99,7 @@ export default function DashboardHome() {
           <StatCard label="Total Properties" value={3000} icon={Database} color="blue" delta="1,247 cleaned" index={0} sparklineData={[2400, 2550, 2700, 2800, 2900, 2950, 3000]} />
           <StatCard label="Duplicates Found" value={347} icon={Search} color="amber" delta="-89 this month" index={1} sparklineData={[520, 480, 450, 420, 400, 370, 347]} />
           <StatCard label="Missing Fields" value={892} icon={Activity} color="purple" delta="-234 this month" index={2} sparklineData={[1200, 1100, 1050, 1000, 960, 920, 892]} />
-          <StatCard label="Voice Notes" value={47} icon={Mic} color="emerald" delta="+12 this week" index={3} sparklineData={[20, 25, 30, 34, 38, 43, 47]} />
+          <StatCard label="Leads Re-engaged" value={23} icon={Mail} color="emerald" delta="+9 this month" index={3} sparklineData={[5, 8, 10, 13, 16, 19, 23]} />
         </div>
 
         {/* Quick Actions */}

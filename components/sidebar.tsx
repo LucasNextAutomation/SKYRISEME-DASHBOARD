@@ -3,19 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { LayoutDashboard, Database, RefreshCw, Image, Mic, MessageSquare, Menu, X, Layers, Search } from "lucide-react";
+import { LayoutDashboard, Database, RefreshCw, Image, Mic, MessageSquare, Menu, X, Layers, Search, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "@/components/notification-bell";
 import { CommandPalette } from "@/components/command-palette";
 
 const nav = [
-  { label: "Overview", href: "/dashboard", icon: LayoutDashboard, number: null, badge: null },
-  { label: "Property Database", href: "/dashboard/database", icon: Database, number: "01", badge: null },
-  { label: "Follow-ups", href: "/dashboard/followups", icon: RefreshCw, number: "02", badge: null },
-  { label: "AI Staging", href: "/dashboard/staging", icon: Image, number: "03", badge: null },
-  { label: "Voice to CRM", href: "/dashboard/voice", icon: Mic, number: "04", badge: null },
-  { label: "AI Assistant", href: "/dashboard/assistant", icon: MessageSquare, number: "05", badge: null },
-  { label: "Architecture", href: "/dashboard/architecture", icon: Layers, number: null, badge: null },
+  { label: "Overview", href: "/dashboard", icon: LayoutDashboard, number: null, badge: null, locked: false },
+  { label: "Property Database", href: "/dashboard/database", icon: Database, number: "01", badge: null, locked: false },
+  { label: "Follow-ups", href: "/dashboard/followups", icon: RefreshCw, number: "02", badge: null, locked: false },
+  { label: "AI Staging", href: "/dashboard/staging", icon: Image, number: "03", badge: "Future", locked: true },
+  { label: "Voice to CRM", href: "/dashboard/voice", icon: Mic, number: "04", badge: "Future", locked: true },
+  { label: "AI Assistant", href: "/dashboard/assistant", icon: MessageSquare, number: "05", badge: "Future", locked: true },
+  { label: "Architecture", href: "/dashboard/architecture", icon: Layers, number: null, badge: null, locked: false },
 ];
 
 export function Sidebar() {
@@ -72,18 +72,29 @@ export function Sidebar() {
               onClick={() => setOpen(false)}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                isActive(item.href)
-                  ? "border-l-2 border-[#1B3A5C] bg-[#F2F2EF] text-[#1B3A5C] shadow-sm"
-                  : "text-[#4A4A5A] hover:bg-[#F2F2EF] hover:translate-x-0.5"
+                item.locked
+                  ? "text-[#9B9BA8]/50 hover:bg-[#F2F2EF]/50"
+                  : isActive(item.href)
+                    ? "border-l-2 border-[#1B3A5C] bg-[#F2F2EF] text-[#1B3A5C] shadow-sm"
+                    : "text-[#4A4A5A] hover:bg-[#F2F2EF] hover:translate-x-0.5"
               )}
             >
-              <item.icon className="size-4" />
-              <span className="flex-1">
+              {item.locked ? (
+                <Lock className="size-3.5 text-[#9B9BA8]/40" />
+              ) : (
+                <item.icon className="size-4" />
+              )}
+              <span className={cn("flex-1", item.locked && "opacity-50")}>
                 {item.number && <span className="text-[10px] text-[#9B9BA8] mr-1.5">[{item.number}]</span>}
                 {item.label}
               </span>
               {item.badge && (
-                <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[8px] font-semibold text-amber-700">{item.badge}</span>
+                <span className={cn(
+                  "rounded-full px-1.5 py-0.5 text-[8px] font-semibold",
+                  item.locked
+                    ? "bg-[#F2F2EF] text-[#9B9BA8]"
+                    : "bg-amber-100 text-amber-700"
+                )}>{item.badge}</span>
               )}
             </Link>
           ))}
