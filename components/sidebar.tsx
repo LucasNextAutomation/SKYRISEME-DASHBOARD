@@ -12,9 +12,9 @@ const nav = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard, number: null, badge: null, locked: false },
   { label: "Property Database", href: "/dashboard/database", icon: Database, number: "01", badge: null, locked: false },
   { label: "Follow-ups", href: "/dashboard/followups", icon: RefreshCw, number: "02", badge: null, locked: false },
-  { label: "AI Staging", href: "/dashboard/staging", icon: Image, number: "03", badge: "Future", locked: true },
-  { label: "Voice to CRM", href: "/dashboard/voice", icon: Mic, number: "04", badge: "Future", locked: true },
-  { label: "AI Assistant", href: "/dashboard/assistant", icon: MessageSquare, number: "05", badge: "Future", locked: true },
+  { label: "Social Media & Videos", href: "/dashboard/staging", icon: Image, number: "03", badge: "Month 3", locked: true },
+  { label: "WhatsApp & Voice", href: "/dashboard/voice", icon: Mic, number: "04", badge: "Month 4", locked: true },
+  { label: "Financial Studies", href: "/dashboard/assistant", icon: MessageSquare, number: "05", badge: "Month 5", locked: true },
   { label: "Architecture", href: "/dashboard/architecture", icon: Layers, number: null, badge: null, locked: false },
 ];
 

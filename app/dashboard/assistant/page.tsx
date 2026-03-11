@@ -7,16 +7,16 @@ export default function AssistantPage() {
   return (
     <LockedSystem
       number="05"
-      title="AI Knowledge Assistant"
-      description="Natural language queries across your entire property and client database"
+      title="Financial Studies & Newsletters"
+      description="Generate financial feasibility studies and send personalized newsletters to your contact list"
       icon={MessageSquare}
       color="from-indigo-500 to-indigo-600"
       features={[
-        "Ask questions about 3,000 properties in natural language",
-        "Client matching and personalized property recommendations",
-        "Market data analysis and pricing trends for Beirut neighborhoods",
-        "Comparative pricing insights: Achrafieh, Gemmayzeh, Verdun, Jounieh",
-        "Instant report generation for owners and investors",
+        "Financial study generator: input land cost, construction parameters — get a full feasibility report",
+        "Construction cost modeling with Lebanese market pricing data",
+        "Automated newsletters: personalized property selections based on contact preferences",
+        "Market insights: neighborhood trends, pricing analytics, investment opportunities",
+        "AI Knowledge Assistant: ask anything about your portfolio in natural language",
       ]}
     />
   );

@@ -34,9 +34,9 @@ export default function DashboardHome() {
   const systems = [
     { number: "01", title: "Property Database", stat: "3,000 properties", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/database", locked: false },
     { number: "02", title: "Follow-ups", stat: "$4.2M recovered", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/followups", locked: false },
-    { number: "03", title: "AI Staging", stat: "—", status: "Future", statusColor: "bg-gray-300", href: "/dashboard/staging", locked: true },
-    { number: "04", title: "Voice to CRM", stat: "—", status: "Future", statusColor: "bg-gray-300", href: "/dashboard/voice", locked: true },
-    { number: "05", title: "AI Assistant", stat: "—", status: "Future", statusColor: "bg-gray-300", href: "/dashboard/assistant", locked: true },
+    { number: "03", title: "Social Media & Videos", stat: "—", status: "Month 3", statusColor: "bg-gray-300", href: "/dashboard/staging", locked: true },
+    { number: "04", title: "WhatsApp & Voice", stat: "—", status: "Month 4", statusColor: "bg-gray-300", href: "/dashboard/voice", locked: true },
+    { number: "05", title: "Financial Studies", stat: "—", status: "Month 5", statusColor: "bg-gray-300", href: "/dashboard/assistant", locked: true },
   ];
 
   const quickActions = [
@@ -60,7 +60,7 @@ export default function DashboardHome() {
             <h1 className="text-[28px] font-bold tracking-tight text-[#0F1117]">Good morning, Maha.</h1>
             <p className="text-sm text-[#9B9BA8] mt-1">Your database and pipeline at a glance.</p>
           </div>
-          <p className="text-sm text-[#9B9BA8] hidden sm:block">February 27, 2026</p>
+          <p className="text-sm text-[#9B9BA8] hidden sm:block">March 11, 2026</p>
         </motion.div>
 
         {/* System overview strip */}

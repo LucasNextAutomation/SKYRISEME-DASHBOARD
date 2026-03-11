@@ -7,16 +7,16 @@ export default function StagingPage() {
   return (
     <LockedSystem
       number="03"
-      title="AI Property Staging"
-      description="Transform empty properties into stunning visualizations"
+      title="Social Media & Professional Videos"
+      description="Auto-post listings to Instagram and Facebook with AI-powered professional video production"
       icon={Image}
       color="from-amber-500 to-amber-600"
       features={[
-        "Multiple styling options: Modern Luxury, Classic Lebanese, Mediterranean, Minimalist",
-        "Room-by-room staging with AI — realistic furniture, decor, and lighting",
-        "Before/after comparison generation for client presentations",
-        "Brochure-ready output quality (4K resolution)",
-        "Batch processing for multiple properties at once",
+        "Auto-post new listings to Instagram and Facebook simultaneously",
+        "Professional AI video production — premium property showcases by our expert collaborator",
+        "Content calendar: schedule posts in advance, preview before publishing",
+        "Branded templates matching SkyRise Me's visual identity",
+        "Multi-language captions — Arabic, French, English — generated automatically",
       ]}
     />
   );
