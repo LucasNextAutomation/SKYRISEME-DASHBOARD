@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "SkyRise Me — AI Property Intelligence Dashboard",
-  description: "Database Intelligence, Automated Follow-ups, AI Staging & Knowledge Assistant — powered by NextAutomation",
+  description: "Property Database, Automated Follow-ups, Videos & Website, WhatsApp & Newsletters, Financial Studies — powered by NextAutomation",
 };
 
 export default function RootLayout({
