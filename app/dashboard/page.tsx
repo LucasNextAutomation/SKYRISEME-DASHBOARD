@@ -34,8 +34,8 @@ export default function DashboardHome() {
   const systems = [
     { number: "01", title: "Property Database", stat: "3,000 properties", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/database", locked: false },
     { number: "02", title: "Follow-ups", stat: "$4.2M recovered", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/followups", locked: false },
-    { number: "03", title: "Social Media & Videos", stat: "—", status: "Month 3", statusColor: "bg-gray-300", href: "/dashboard/staging", locked: true },
-    { number: "04", title: "WhatsApp & Voice", stat: "—", status: "Month 4", statusColor: "bg-gray-300", href: "/dashboard/voice", locked: true },
+    { number: "03", title: "Videos & Website", stat: "—", status: "Month 3", statusColor: "bg-gray-300", href: "/dashboard/staging", locked: true },
+    { number: "04", title: "WhatsApp & Newsletters", stat: "—", status: "Month 4", statusColor: "bg-gray-300", href: "/dashboard/voice", locked: true },
     { number: "05", title: "Financial Studies", stat: "—", status: "Month 5", statusColor: "bg-gray-300", href: "/dashboard/assistant", locked: true },
   ];
 
