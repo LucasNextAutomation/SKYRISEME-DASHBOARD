@@ -23,6 +23,21 @@ const properties = [
   { id: 8, name: "Broummana Garden Estate", location: "Broummana", price: "$4,500,000", sqm: "900 sqm", status: "clean", type: "Villa" },
   { id: 9, name: "Beit Mery Panoramic", location: "Beit Mery", price: "$3,800,000", sqm: "700 sqm", status: "outdated", type: "Villa" },
   { id: 10, name: "Downtown Saifi Loft", location: "Downtown Beirut", price: "$950,000", sqm: "200 sqm", status: "duplicate", type: "Duplex" },
+  { id: 11, name: "Mansourieh Hilltop Villa", location: "Mansourieh", price: "$620,000", sqm: "280 sqm", status: "clean", type: "Villa" },
+  { id: 12, name: "Hamra Boulevard Apartment", location: "Hamra", price: "$340,000", sqm: "110 sqm", status: "clean", type: "Apartment" },
+  { id: 13, name: "Antelias Garden Duplex", location: "Antelias", price: "$520,000", sqm: "200 sqm", status: "missing", type: "Duplex" },
+  { id: 14, name: "Hazmieh Panoramic Tower", location: "Hazmieh", price: "$890,000", sqm: "240 sqm", status: "clean", type: "Apartment" },
+  { id: 15, name: "Bikfaya Mountain Lodge", location: "Bikfaya", price: "$1,100,000", sqm: "350 sqm", status: "clean", type: "Villa" },
+  { id: 16, name: "Mar Mikhael Rooftop", location: "Mar Mikhael", price: "$680,000", sqm: "160 sqm", status: "duplicate", type: "Penthouse" },
+  { id: 17, name: "Jal El Dib Studio", location: "Jal El Dib", price: "$185,000", sqm: "65 sqm", status: "clean", type: "Studio" },
+  { id: 18, name: "Keserwan Lake View", location: "Keserwan", price: "$750,000", sqm: "210 sqm", status: "outdated", type: "Apartment" },
+  { id: 19, name: "Sidon Seaside Residence", location: "Sidon", price: "$420,000", sqm: "150 sqm", status: "clean", type: "Apartment" },
+  { id: 20, name: "Tripoli Heritage House", location: "Tripoli", price: "$290,000", sqm: "300 sqm", status: "missing", type: "Villa" },
+  { id: 21, name: "Aley Forest Retreat", location: "Aley", price: "$560,000", sqm: "250 sqm", status: "clean", type: "Villa" },
+  { id: 22, name: "Kaslik Waterfront", location: "Kaslik", price: "$1,400,000", sqm: "280 sqm", status: "clean", type: "Penthouse" },
+  { id: 23, name: "Sin El Fil Commercial", location: "Sin El Fil", price: "$920,000", sqm: "400 sqm", status: "clean", type: "Commercial" },
+  { id: 24, name: "Tabarja Beach Villa", location: "Tabarja", price: "$2,100,000", sqm: "500 sqm", status: "outdated", type: "Villa" },
+  { id: 25, name: "Achrafieh Studio Modern", location: "Achrafieh", price: "$210,000", sqm: "55 sqm", status: "clean", type: "Studio" },
 ];
 
 const statusConfig: Record<string, { label: string; color: string; icon: typeof CheckCircle }> = {

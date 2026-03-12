@@ -1,58 +1,75 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+function getTimeAgo(minutes: number) {
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} min ago`;
+  const hours = Math.floor(minutes / 60);
+  return `${hours}h ago`;
+}
+
+function useRealisticTimestamps() {
+  const [offsets, setOffsets] = useState([2, 15, 0, 5, 0]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOffsets((prev) => prev.map((o) => (o === 0 ? 0 : o + 1)));
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+  return offsets;
+}
+
 const integrations = [
   {
     name: "Apimo CRM",
-    description: "Properties & contacts sync",
+    description: "Bidirectional property & contact sync via REST API",
     status: "connected" as const,
-    lastSync: "2 min ago",
     icon: "🏠",
     color: "bg-blue-50 border-blue-200",
     records: "3,000 properties · 1,200 contacts",
   },
   {
     name: "Excel File Sync",
-    description: "Automated Excel import & deduplication",
+    description: "Automated import, column mapping & deduplication",
     status: "connected" as const,
-    lastSync: "15 min ago",
     icon: "📊",
     color: "bg-emerald-50 border-emerald-200",
-    records: "1,847 records imported",
+    records: "14 spreadsheets · 1,847 records imported",
   },
   {
     name: "WhatsApp Business",
-    description: "Real-time messages & voice notes",
+    description: "Messages, voice notes & automated replies",
     status: "connected" as const,
-    lastSync: "Live",
     icon: "💬",
     color: "bg-emerald-50 border-emerald-200",
-    records: "2,340 messages · 47 voice notes",
+    records: "2,340 messages · 47 voice notes transcribed",
   },
   {
     name: "Email (Outlook/Gmail)",
-    description: "Email sync & calendar integration",
+    description: "Email sync, calendar & follow-up tracking",
     status: "connected" as const,
-    lastSync: "5 min ago",
     icon: "📧",
     color: "bg-blue-50 border-blue-200",
-    records: "1,560 emails indexed",
+    records: "1,560 emails indexed · 87 follow-ups sent",
   },
   {
     name: "Claude AI",
-    description: "NLP, transcription, staging & knowledge base",
+    description: "NLP, transcription, classification & knowledge base",
     status: "connected" as const,
-    lastSync: "Live",
     icon: "🧠",
     color: "bg-purple-50 border-purple-200",
-    records: "5 AI systems active",
+    records: "5 AI systems active · 12,400 operations today",
   },
 ];
 
 export function IntegrationStatus() {
+  const offsets = useRealisticTimestamps();
+  const syncLabels = offsets.map((o) => (o === 0 ? "Live" : getTimeAgo(o)));
+
   return (
     <div className="space-y-3">
       {integrations.map((int, i) => (
@@ -77,8 +94,8 @@ export function IntegrationStatus() {
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
             <div className="flex items-center gap-1.5">
-              <RefreshCw className="size-3 text-emerald-500" />
-              <span className="text-[10px] text-emerald-600 font-medium">{int.lastSync}</span>
+              <RefreshCw className={cn("size-3", syncLabels[i] === "Live" ? "text-emerald-500 animate-spin" : "text-emerald-500")} style={syncLabels[i] === "Live" ? { animationDuration: "3s" } : undefined} />
+              <span className="text-[10px] text-emerald-600 font-medium">{syncLabels[i]}</span>
             </div>
             <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
           </div>

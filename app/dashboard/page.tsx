@@ -60,7 +60,7 @@ export default function DashboardHome() {
             <h1 className="text-[28px] font-bold tracking-tight text-[#0F1117]">Good morning, Maha.</h1>
             <p className="text-sm text-[#9B9BA8] mt-1">Your database and pipeline at a glance.</p>
           </div>
-          <p className="text-sm text-[#9B9BA8] hidden sm:block">March 11, 2026</p>
+          <p className="text-sm text-[#9B9BA8] hidden sm:block">{new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
         </motion.div>
 
         {/* System overview strip */}

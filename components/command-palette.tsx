@@ -10,13 +10,26 @@ interface CommandPaletteProps {
   onClose: () => void;
 }
 
+const properties = [
+  { name: "Sky Residence Penthouse", location: "Achrafieh", price: "$1,850,000" },
+  { name: "Gemmayzeh Heritage Loft", location: "Gemmayzeh", price: "$780,000" },
+  { name: "Royal Rabieh Estate", location: "Rabieh", price: "$4,200,000" },
+  { name: "Verdun Tower Unit 12B", location: "Verdun", price: "$450,000" },
+  { name: "Jounieh Bay Residence", location: "Jounieh", price: "$1,200,000" },
+  { name: "Baabda Presidential Villa", location: "Baabda", price: "$3,500,000" },
+  { name: "Dbayeh Marina Flat", location: "Dbayeh", price: "$380,000" },
+  { name: "Broummana Garden Estate", location: "Broummana", price: "$4,500,000" },
+  { name: "Downtown Saifi Loft", location: "Downtown Beirut", price: "$950,000" },
+  { name: "Mansourieh Hilltop", location: "Mansourieh", price: "$620,000" },
+];
+
 const pages = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard, keywords: "home dashboard overview" },
   { label: "Property Database", href: "/dashboard/database", icon: Database, keywords: "database properties cleanup duplicates" },
   { label: "Follow-ups", href: "/dashboard/followups", icon: RefreshCw, keywords: "followups pipeline reactivation sequences" },
-  { label: "AI Staging", href: "/dashboard/staging", icon: Image, keywords: "staging visualization render" },
-  { label: "Voice to CRM", href: "/dashboard/voice", icon: Mic, keywords: "voice whatsapp transcription notes" },
-  { label: "AI Assistant", href: "/dashboard/assistant", icon: MessageSquare, keywords: "assistant chat query knowledge" },
+  { label: "Videos & Website", href: "/dashboard/staging", icon: Image, keywords: "staging video content social media website" },
+  { label: "WhatsApp & Newsletters", href: "/dashboard/voice", icon: Mic, keywords: "voice whatsapp transcription notes newsletters" },
+  { label: "Financial Studies", href: "/dashboard/assistant", icon: MessageSquare, keywords: "financial studies optimization assistant" },
   { label: "Architecture", href: "/dashboard/architecture", icon: Layers, keywords: "architecture systems tech stack" },
 ];
 
@@ -43,6 +56,14 @@ function CommandPaletteInner({ onClose }: { onClose: () => void }) {
           c.name.toLowerCase().includes(q) ||
           c.nationality.toLowerCase().includes(q) ||
           c.preference.toLowerCase().includes(q)
+      ).slice(0, 4)
+    : [];
+
+  const filteredProperties = q.length >= 2
+    ? properties.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.location.toLowerCase().includes(q)
       ).slice(0, 4)
     : [];
 
@@ -99,9 +120,7 @@ function CommandPaletteInner({ onClose }: { onClose: () => void }) {
               {filteredClients.map((c) => (
                 <button
                   key={c.id}
-                  onClick={() => {
-                    onClose();
-                  }}
+                  onClick={() => handleSelect(`/dashboard/database/${c.id}`)}
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-[#F2F2EF] transition-colors"
                 >
                   <div className="size-7 rounded-full bg-[#F2F2EF] flex items-center justify-center text-[10px] font-bold text-[#1B3A5C]">
@@ -117,13 +136,34 @@ function CommandPaletteInner({ onClose }: { onClose: () => void }) {
             </div>
           )}
 
-          {query && filteredPages.length === 0 && filteredClients.length === 0 && (
+          {/* Properties */}
+          {filteredProperties.length > 0 && (
+            <div className="mt-1">
+              <p className="section-label px-3 py-1.5">Properties</p>
+              {filteredProperties.map((p) => (
+                <button
+                  key={p.name}
+                  onClick={() => handleSelect("/dashboard/database")}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-[#F2F2EF] transition-colors"
+                >
+                  <Database className="size-4 text-[#9B9BA8]" />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-[#0F1117]">{p.name}</span>
+                    <span className="text-xs text-[#9B9BA8] ml-2">{p.location}</span>
+                  </div>
+                  <span className="text-xs font-medium text-[#1B3A5C]">{p.price}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {query && filteredPages.length === 0 && filteredClients.length === 0 && filteredProperties.length === 0 && (
             <p className="text-center text-sm text-[#9B9BA8] py-8">No results for &ldquo;{query}&rdquo;</p>
           )}
 
           {!query && (
             <p className="text-center text-xs text-[#9B9BA8] py-6">
-              Type to search pages and clients...
+              Type to search pages, clients, or properties...
             </p>
           )}
         </div>
