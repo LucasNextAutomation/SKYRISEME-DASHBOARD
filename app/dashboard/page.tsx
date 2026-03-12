@@ -1,14 +1,20 @@
 "use client";
 
-import { Database, Mail, Image, Mic, MessageSquare, Search, Layers, Activity, Lock } from "lucide-react";
+import { Database, Mail, Search, Activity, Layers, Video, MessageCircle, Calculator, Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { StatCard } from "@/components/stat-card";
 import { PageTransition } from "@/components/page-transition";
 import { useStore } from "@/lib/store";
 import { useToast } from "@/components/toast";
 import { databaseHealth } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+
+const BeirutMap = dynamic(() => import("@/components/beirut-map").then(m => ({ default: m.BeirutMap })), {
+  ssr: false,
+  loading: () => <div className="card-premium h-[400px] flex items-center justify-center text-sm text-[#9B9BA8]">Loading map...</div>,
+});
 
 const activityDots: Record<string, string> = {
   whatsapp: "bg-emerald-400",
@@ -32,11 +38,12 @@ export default function DashboardHome() {
   const { toast } = useToast();
 
   const systems = [
-    { number: "01", title: "Property Database", stat: "3,000 properties", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/database", locked: false },
-    { number: "02", title: "Follow-ups", stat: "$4.2M recovered", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/followups", locked: false },
-    { number: "03", title: "Videos & Website", stat: "—", status: "Month 3", statusColor: "bg-gray-300", href: "/dashboard/staging", locked: true },
-    { number: "04", title: "WhatsApp & Newsletters", stat: "—", status: "Month 4", statusColor: "bg-gray-300", href: "/dashboard/voice", locked: true },
-    { number: "05", title: "Financial Studies", stat: "—", status: "Month 5", statusColor: "bg-gray-300", href: "/dashboard/assistant", locked: true },
+    { number: "01", title: "Property Database", stat: "3,051 properties", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/database", icon: Database },
+    { number: "02", title: "Follow-ups & Pipeline", stat: "$4.2M recovered", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/followups", icon: Mail },
+    { number: "03", title: "Videos & Website", stat: "24 videos", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/staging", icon: Video },
+    { number: "04", title: "WhatsApp & Newsletters", stat: "2,340 messages", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/voice", icon: MessageCircle },
+    { number: "05", title: "Financial Studies", stat: "12 reports", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/assistant", icon: Calculator },
+    { number: "06", title: "Call Transcription", stat: "156 calls", status: "Active", statusColor: "bg-emerald-400", href: "/dashboard/calls", icon: Phone },
   ];
 
   const quickActions = [
@@ -58,37 +65,35 @@ export default function DashboardHome() {
         >
           <div>
             <h1 className="text-[28px] font-bold tracking-tight text-[#0F1117]">Good morning, Maha.</h1>
-            <p className="text-sm text-[#9B9BA8] mt-1">Your database and pipeline at a glance.</p>
+            <p className="text-sm text-[#9B9BA8] mt-1">Your database, pipeline, and all 6 systems at a glance.</p>
           </div>
-          <p className="text-sm text-[#9B9BA8] hidden sm:block">{new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] text-emerald-600 font-medium">All systems synced</span>
+            </div>
+            <p className="text-sm text-[#9B9BA8]">{new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+          </div>
         </motion.div>
 
         {/* System overview strip */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {systems.map((sys, i) => (
             <motion.button
               key={sys.number}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.06, duration: 0.3 }}
+              transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
               onClick={() => router.push(sys.href)}
-              className={cn(
-                "card-premium-hover p-4 flex items-center gap-3 text-left",
-                sys.locked && "opacity-40"
-              )}
+              className="card-premium-hover p-4 flex items-center gap-3 text-left"
             >
               <span className="text-2xl font-bold text-[#1B3A5C]/20">{sys.number}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-[#0F1117]">{sys.title}</p>
-                <p className="text-xs text-[#9B9BA8]">{sys.stat}</p>
+                <p className="text-xs font-semibold text-[#0F1117] truncate">{sys.title}</p>
+                <p className="text-[10px] text-[#9B9BA8]">{sys.stat}</p>
               </div>
-              <div className="flex items-center gap-1.5">
-                {sys.locked ? (
-                  <Lock className="size-3 text-[#9B9BA8]" />
-                ) : (
-                  <span className={cn("size-1.5 rounded-full animate-pulse", sys.statusColor)} />
-                )}
-                <span className="text-[10px] text-[#9B9BA8]">{sys.status}</span>
+              <div className="flex items-center gap-1">
+                <span className={cn("size-1.5 rounded-full animate-pulse", sys.statusColor)} />
               </div>
             </motion.button>
           ))}
@@ -96,10 +101,16 @@ export default function DashboardHome() {
 
         {/* Stat Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Total Properties" value={3000} icon={Database} color="blue" delta="1,247 cleaned" index={0} sparklineData={[2400, 2550, 2700, 2800, 2900, 2950, 3000]} />
-          <StatCard label="Duplicates Found" value={347} icon={Search} color="amber" delta="-89 this month" index={1} sparklineData={[520, 480, 450, 420, 400, 370, 347]} />
-          <StatCard label="Missing Fields" value={892} icon={Activity} color="purple" delta="-234 this month" index={2} sparklineData={[1200, 1100, 1050, 1000, 960, 920, 892]} />
-          <StatCard label="Leads Re-engaged" value={23} icon={Mail} color="emerald" delta="+9 this month" index={3} sparklineData={[5, 8, 10, 13, 16, 19, 23]} />
+          <StatCard label="Total Properties" value={3051} icon={Database} color="blue" delta="1,847 from Apimo + 1,204 Excel" index={0} sparklineData={[2400, 2550, 2700, 2800, 2900, 2950, 3051]} />
+          <StatCard label="Pipeline Value" value="$4.2M" icon={Search} color="amber" delta="340 active contacts" index={1} sparklineData={[2.1, 2.8, 3.2, 3.5, 3.8, 4.0, 4.2]} />
+          <StatCard label="Response Rate" value="26%" icon={Activity} color="purple" delta="from re-engagement sequences" index={2} sparklineData={[12, 15, 18, 20, 22, 24, 26]} />
+          <StatCard label="Database Health" value="91%" icon={Mail} color="emerald" delta="+8% this month" index={3} sparklineData={[72, 78, 82, 85, 87, 89, 91]} />
+        </div>
+
+        {/* Map */}
+        <div>
+          <p className="section-label mb-3">Property Map — Greater Beirut</p>
+          <BeirutMap height="400px" />
         </div>
 
         {/* Quick Actions */}
@@ -161,7 +172,6 @@ export default function DashboardHome() {
                 <p className="section-label">Database Health</p>
                 <span className="text-lg font-bold text-emerald-600 tabular-nums">{databaseHealth.healthScore}%</span>
               </div>
-              {/* Segmented bar */}
               <div className="flex h-3 rounded-full overflow-hidden mb-4">
                 {segments.map((s) => (
                   <motion.div
@@ -173,7 +183,6 @@ export default function DashboardHome() {
                   />
                 ))}
               </div>
-              {/* Legend */}
               <div className="grid grid-cols-2 gap-2">
                 {segments.map((s) => (
                   <div key={s.label} className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 interface SystemHeaderProps {
-  number: "01" | "02" | "03" | "04" | "05";
+  number: "01" | "02" | "03" | "04" | "05" | "06";
   title: string;
   description: string;
 }

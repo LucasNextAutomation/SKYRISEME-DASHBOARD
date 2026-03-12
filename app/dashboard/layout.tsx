@@ -1,12 +1,17 @@
+"use client";
+
 import { Sidebar } from "@/components/sidebar";
+import { useStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const collapsed = useStore((s) => s.sidebarCollapsed);
+
   return (
     <div className="min-h-screen bg-[#F7F8FA]">
       <Sidebar />
-      <div className="lg:pl-60 flex flex-col min-h-screen">
+      <div className={cn("flex flex-col min-h-screen transition-all duration-200", collapsed ? "lg:pl-16" : "lg:pl-60")}>
         <main className="flex-1 p-6 pt-16 lg:pt-8 lg:px-10 max-w-7xl">{children}</main>
-        {/* Footer */}
         <footer className="lg:px-10 px-6 py-4 border-t border-[#E8E8E4]/60">
           <div className="max-w-7xl flex items-center justify-between">
             <div className="flex items-center gap-2 text-[11px] text-[#9B9BA8]/60">

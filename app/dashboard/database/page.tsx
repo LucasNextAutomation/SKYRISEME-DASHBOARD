@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Database, Search, AlertTriangle, CheckCircle, Copy, Trash2, RefreshCw, Users, MessageSquare, Mail, ChevronRight } from "lucide-react";
+import { Database, Search, AlertTriangle, CheckCircle, Copy, Trash2, RefreshCw, Users, MessageSquare, Mail, ChevronRight, Map, List } from "lucide-react";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { StatCard } from "@/components/stat-card";
 import { SystemHeader } from "@/components/system-header";
 import { PageTransition } from "@/components/page-transition";
@@ -12,32 +13,37 @@ import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+const BeirutMap = dynamic(() => import("@/components/beirut-map").then(m => ({ default: m.BeirutMap })), {
+  ssr: false,
+  loading: () => <div className="card-premium h-[500px] flex items-center justify-center text-sm text-[#9B9BA8]">Loading map...</div>,
+});
+
 const properties = [
-  { id: 1, name: "Sky Residence Penthouse", location: "Achrafieh", price: "$1,850,000", sqm: "320 sqm", status: "clean", type: "Penthouse" },
-  { id: 2, name: "Gemmayzeh Heritage Loft", location: "Gemmayzeh", price: "$780,000", sqm: "180 sqm", status: "clean", type: "Apartment" },
-  { id: 3, name: "Royal Rabieh Estate", location: "Rabieh", price: "$4,200,000", sqm: "800 sqm", status: "clean", type: "Villa" },
-  { id: 4, name: "Verdun Tower Unit 12B", location: "Verdun", price: "$450,000", sqm: "120 sqm", status: "missing", type: "Apartment" },
-  { id: 5, name: "Jounieh Bay Residence", location: "Jounieh", price: "$1,200,000", sqm: "220 sqm", status: "clean", type: "Apartment" },
-  { id: 6, name: "Baabda Presidential Villa", location: "Baabda", price: "$3,500,000", sqm: "650 sqm", status: "duplicate", type: "Villa" },
-  { id: 7, name: "Dbayeh Marina Flat", location: "Dbayeh", price: "$380,000", sqm: "100 sqm", status: "missing", type: "Apartment" },
-  { id: 8, name: "Broummana Garden Estate", location: "Broummana", price: "$4,500,000", sqm: "900 sqm", status: "clean", type: "Villa" },
-  { id: 9, name: "Beit Mery Panoramic", location: "Beit Mery", price: "$3,800,000", sqm: "700 sqm", status: "outdated", type: "Villa" },
-  { id: 10, name: "Downtown Saifi Loft", location: "Downtown Beirut", price: "$950,000", sqm: "200 sqm", status: "duplicate", type: "Duplex" },
-  { id: 11, name: "Mansourieh Hilltop Villa", location: "Mansourieh", price: "$620,000", sqm: "280 sqm", status: "clean", type: "Villa" },
-  { id: 12, name: "Hamra Boulevard Apartment", location: "Hamra", price: "$340,000", sqm: "110 sqm", status: "clean", type: "Apartment" },
-  { id: 13, name: "Antelias Garden Duplex", location: "Antelias", price: "$520,000", sqm: "200 sqm", status: "missing", type: "Duplex" },
-  { id: 14, name: "Hazmieh Panoramic Tower", location: "Hazmieh", price: "$890,000", sqm: "240 sqm", status: "clean", type: "Apartment" },
-  { id: 15, name: "Bikfaya Mountain Lodge", location: "Bikfaya", price: "$1,100,000", sqm: "350 sqm", status: "clean", type: "Villa" },
-  { id: 16, name: "Mar Mikhael Rooftop", location: "Mar Mikhael", price: "$680,000", sqm: "160 sqm", status: "duplicate", type: "Penthouse" },
-  { id: 17, name: "Jal El Dib Studio", location: "Jal El Dib", price: "$185,000", sqm: "65 sqm", status: "clean", type: "Studio" },
-  { id: 18, name: "Keserwan Lake View", location: "Keserwan", price: "$750,000", sqm: "210 sqm", status: "outdated", type: "Apartment" },
-  { id: 19, name: "Sidon Seaside Residence", location: "Sidon", price: "$420,000", sqm: "150 sqm", status: "clean", type: "Apartment" },
-  { id: 20, name: "Tripoli Heritage House", location: "Tripoli", price: "$290,000", sqm: "300 sqm", status: "missing", type: "Villa" },
-  { id: 21, name: "Aley Forest Retreat", location: "Aley", price: "$560,000", sqm: "250 sqm", status: "clean", type: "Villa" },
-  { id: 22, name: "Kaslik Waterfront", location: "Kaslik", price: "$1,400,000", sqm: "280 sqm", status: "clean", type: "Penthouse" },
-  { id: 23, name: "Sin El Fil Commercial", location: "Sin El Fil", price: "$920,000", sqm: "400 sqm", status: "clean", type: "Commercial" },
-  { id: 24, name: "Tabarja Beach Villa", location: "Tabarja", price: "$2,100,000", sqm: "500 sqm", status: "outdated", type: "Villa" },
-  { id: 25, name: "Achrafieh Studio Modern", location: "Achrafieh", price: "$210,000", sqm: "55 sqm", status: "clean", type: "Studio" },
+  { id: 1, name: "Sky Residence Penthouse", location: "Achrafieh", price: "$1,850,000", sqm: "320 sqm", status: "clean", type: "Penthouse", source: "apimo" as const },
+  { id: 2, name: "Gemmayzeh Heritage Loft", location: "Gemmayzeh", price: "$780,000", sqm: "180 sqm", status: "clean", type: "Apartment", source: "apimo" as const },
+  { id: 3, name: "Royal Rabieh Estate", location: "Rabieh", price: "$4,200,000", sqm: "800 sqm", status: "clean", type: "Villa", source: "apimo" as const },
+  { id: 4, name: "Verdun Tower Unit 12B", location: "Verdun", price: "$450,000", sqm: "120 sqm", status: "missing", type: "Apartment", source: "excel" as const },
+  { id: 5, name: "Jounieh Bay Residence", location: "Jounieh", price: "$1,200,000", sqm: "220 sqm", status: "clean", type: "Apartment", source: "apimo" as const },
+  { id: 6, name: "Baabda Presidential Villa", location: "Baabda", price: "$3,500,000", sqm: "650 sqm", status: "duplicate", type: "Villa", source: "excel" as const },
+  { id: 7, name: "Dbayeh Marina Flat", location: "Dbayeh", price: "$380,000", sqm: "100 sqm", status: "missing", type: "Apartment", source: "excel" as const },
+  { id: 8, name: "Broummana Garden Estate", location: "Broummana", price: "$4,500,000", sqm: "900 sqm", status: "clean", type: "Villa", source: "apimo" as const },
+  { id: 9, name: "Beit Mery Panoramic", location: "Beit Mery", price: "$3,800,000", sqm: "700 sqm", status: "outdated", type: "Villa", source: "apimo" as const },
+  { id: 10, name: "Downtown Saifi Loft", location: "Downtown Beirut", price: "$950,000", sqm: "200 sqm", status: "duplicate", type: "Duplex", source: "excel" as const },
+  { id: 11, name: "Mansourieh Hilltop Villa", location: "Mansourieh", price: "$620,000", sqm: "280 sqm", status: "clean", type: "Villa", source: "apimo" as const },
+  { id: 12, name: "Hamra Boulevard Apartment", location: "Hamra", price: "$340,000", sqm: "110 sqm", status: "clean", type: "Apartment", source: "excel" as const },
+  { id: 13, name: "Antelias Garden Duplex", location: "Antelias", price: "$520,000", sqm: "200 sqm", status: "missing", type: "Duplex", source: "excel" as const },
+  { id: 14, name: "Hazmieh Panoramic Tower", location: "Hazmieh", price: "$890,000", sqm: "240 sqm", status: "clean", type: "Apartment", source: "apimo" as const },
+  { id: 15, name: "Bikfaya Mountain Lodge", location: "Bikfaya", price: "$1,100,000", sqm: "350 sqm", status: "clean", type: "Villa", source: "apimo" as const },
+  { id: 16, name: "Mar Mikhael Rooftop", location: "Mar Mikhael", price: "$680,000", sqm: "160 sqm", status: "duplicate", type: "Penthouse", source: "excel" as const },
+  { id: 17, name: "Jal El Dib Studio", location: "Jal El Dib", price: "$185,000", sqm: "65 sqm", status: "clean", type: "Studio", source: "apimo" as const },
+  { id: 18, name: "Keserwan Lake View", location: "Keserwan", price: "$750,000", sqm: "210 sqm", status: "outdated", type: "Apartment", source: "apimo" as const },
+  { id: 19, name: "Sidon Seaside Residence", location: "Sidon", price: "$420,000", sqm: "150 sqm", status: "clean", type: "Apartment", source: "excel" as const },
+  { id: 20, name: "Tripoli Heritage House", location: "Tripoli", price: "$290,000", sqm: "300 sqm", status: "missing", type: "Villa", source: "excel" as const },
+  { id: 21, name: "Aley Forest Retreat", location: "Aley", price: "$560,000", sqm: "250 sqm", status: "clean", type: "Villa", source: "apimo" as const },
+  { id: 22, name: "Kaslik Waterfront", location: "Kaslik", price: "$1,400,000", sqm: "280 sqm", status: "clean", type: "Penthouse", source: "apimo" as const },
+  { id: 23, name: "Sin El Fil Commercial", location: "Sin El Fil", price: "$920,000", sqm: "400 sqm", status: "clean", type: "Commercial", source: "excel" as const },
+  { id: 24, name: "Tabarja Beach Villa", location: "Tabarja", price: "$2,100,000", sqm: "500 sqm", status: "outdated", type: "Villa", source: "apimo" as const },
+  { id: 25, name: "Achrafieh Studio Modern", location: "Achrafieh", price: "$210,000", sqm: "55 sqm", status: "clean", type: "Studio", source: "excel" as const },
 ];
 
 const statusConfig: Record<string, { label: string; color: string; icon: typeof CheckCircle }> = {
@@ -72,6 +78,7 @@ export default function DatabasePage() {
   const [filter, setFilter] = useState("all");
   const [clientSearch, setClientSearch] = useState("");
   const [clientStatusFilter, setClientStatusFilter] = useState("all");
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const { toast } = useToast();
   const clients = useStore((s) => s.clients);
 
@@ -93,7 +100,7 @@ export default function DatabasePage() {
         <SystemHeader
           number="01"
           title="PROPERTY DATABASE"
-          description="3,000 properties structured, deduplicated & enriched by AI"
+          description="3,051 properties structured, deduplicated & enriched by AI — 1,847 from Apimo + 1,204 from Excel"
         />
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -120,35 +127,66 @@ export default function DatabasePage() {
           <p className="text-xs text-[#9B9BA8] mt-2">Target: 95% by end of month. {databaseHealth.outdatedListings} outdated listings remaining.</p>
         </div>
 
-        {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#9B9BA8]" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search properties by name or location..."
-              className="w-full rounded-lg bg-white border border-[#E8E8E4] pl-10 pr-4 py-2.5 text-sm text-[#0F1117] focus:outline-none focus:ring-2 focus:ring-[#1B3A5C]/20"
-            />
-          </div>
-          <div className="flex gap-2">
-            {["all", "clean", "missing", "duplicate", "outdated"].map((f) => (
+        {/* View Toggle + Search & Filter */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex rounded-lg border border-[#E8E8E4] overflow-hidden">
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={cn(
-                  "rounded-lg px-3 py-2 text-xs font-medium transition-colors",
-                  filter === f ? "bg-[#1B3A5C] text-white" : "bg-white border border-[#E8E8E4] text-[#4A4A5A] hover:bg-[#F2F2EF]"
-                )}
+                onClick={() => setViewMode("list")}
+                className={cn("flex items-center gap-1.5 px-3 py-2 text-xs font-medium transition-colors", viewMode === "list" ? "bg-[#1B3A5C] text-white" : "bg-white text-[#4A4A5A] hover:bg-[#F2F2EF]")}
               >
-                {f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1)}
+                <List className="size-3.5" /> List
               </button>
-            ))}
+              <button
+                onClick={() => setViewMode("map")}
+                className={cn("flex items-center gap-1.5 px-3 py-2 text-xs font-medium transition-colors border-l border-[#E8E8E4]", viewMode === "map" ? "bg-[#1B3A5C] text-white" : "bg-white text-[#4A4A5A] hover:bg-[#F2F2EF]")}
+              >
+                <Map className="size-3.5" /> Map
+              </button>
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              <span className="flex items-center gap-1.5 text-[10px] text-blue-600 font-medium">
+                <span className="size-2 rounded-full bg-blue-400" /> Apimo (1,847)
+              </span>
+              <span className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-medium">
+                <span className="size-2 rounded-full bg-emerald-400" /> Excel (1,204)
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#9B9BA8]" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search properties by name or location..."
+                className="w-full rounded-lg bg-white border border-[#E8E8E4] pl-10 pr-4 py-2.5 text-sm text-[#0F1117] focus:outline-none focus:ring-2 focus:ring-[#1B3A5C]/20"
+              />
+            </div>
+            <div className="flex gap-2">
+              {["all", "clean", "missing", "duplicate", "outdated"].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-xs font-medium transition-colors",
+                    filter === f ? "bg-[#1B3A5C] text-white" : "bg-white border border-[#E8E8E4] text-[#4A4A5A] hover:bg-[#F2F2EF]"
+                  )}
+                >
+                  {f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
+        {/* Map View */}
+        {viewMode === "map" && (
+          <BeirutMap height="500px" />
+        )}
+
         {/* Property list */}
-        <div className="card-premium overflow-hidden">
+        {viewMode === "list" && <div className="card-premium overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -158,6 +196,7 @@ export default function DatabasePage() {
                   <th className="text-left text-[10px] font-semibold text-[#9B9BA8] uppercase tracking-wider px-5 py-3">Type</th>
                   <th className="text-left text-[10px] font-semibold text-[#9B9BA8] uppercase tracking-wider px-5 py-3">Price</th>
                   <th className="text-left text-[10px] font-semibold text-[#9B9BA8] uppercase tracking-wider px-5 py-3">Size</th>
+                  <th className="text-left text-[10px] font-semibold text-[#9B9BA8] uppercase tracking-wider px-5 py-3">Source</th>
                   <th className="text-left text-[10px] font-semibold text-[#9B9BA8] uppercase tracking-wider px-5 py-3">Status</th>
                   <th className="text-left text-[10px] font-semibold text-[#9B9BA8] uppercase tracking-wider px-5 py-3">Action</th>
                 </tr>
@@ -178,6 +217,11 @@ export default function DatabasePage() {
                       <td className="px-5 py-3.5 text-sm text-[#4A4A5A]">{prop.type}</td>
                       <td className="px-5 py-3.5 text-sm font-medium text-[#0F1117] tabular-nums">{prop.price}</td>
                       <td className="px-5 py-3.5 text-sm text-[#4A4A5A]">{prop.sqm}</td>
+                      <td className="px-5 py-3.5">
+                        <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold", prop.source === "apimo" ? "text-blue-700 bg-blue-50" : "text-emerald-700 bg-emerald-50")}>
+                          {prop.source === "apimo" ? "🏠 Apimo" : "📊 Excel"}
+                        </span>
+                      </td>
                       <td className="px-5 py-3.5">
                         <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold", cfg.color)}>
                           <cfg.icon className="size-2.5" />
@@ -205,9 +249,9 @@ export default function DatabasePage() {
             </table>
           </div>
           <div className="px-5 py-3 border-t border-[#E8E8E4] bg-[#F7F8FA]">
-            <p className="text-xs text-[#9B9BA8]">Showing {filtered.length} of 3,000 properties</p>
+            <p className="text-xs text-[#9B9BA8]">Showing {filtered.length} of 3,051 properties</p>
           </div>
-        </div>
+        </div>}
 
         {/* ============================================================= */}
         {/* CLIENTS SECTION */}

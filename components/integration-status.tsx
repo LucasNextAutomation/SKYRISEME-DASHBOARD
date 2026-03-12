@@ -13,7 +13,7 @@ function getTimeAgo(minutes: number) {
 }
 
 function useRealisticTimestamps() {
-  const [offsets, setOffsets] = useState([2, 15, 0, 5, 0]);
+  const [offsets, setOffsets] = useState([2, 15, 0, 5, 0, 8, 0]);
   useEffect(() => {
     const interval = setInterval(() => {
       setOffsets((prev) => prev.map((o) => (o === 0 ? 0 : o + 1)));
@@ -57,12 +57,20 @@ const integrations = [
     records: "1,560 emails indexed · 87 follow-ups sent",
   },
   {
+    name: "Fireflies.ai",
+    description: "Call recording, transcription & AI meeting notes",
+    status: "connected" as const,
+    icon: "🔥",
+    color: "bg-orange-50 border-orange-200",
+    records: "156 calls recorded · 98% transcription accuracy",
+  },
+  {
     name: "Claude AI",
     description: "NLP, transcription, classification & knowledge base",
     status: "connected" as const,
     icon: "🧠",
     color: "bg-purple-50 border-purple-200",
-    records: "5 AI systems active · 12,400 operations today",
+    records: "6 AI systems active · 12,400 operations today",
   },
 ];
 

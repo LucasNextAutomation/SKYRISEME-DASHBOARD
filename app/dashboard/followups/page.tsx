@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Users, MessageSquare, RefreshCw, TrendingUp, Send, Calendar, Mail } from "lucide-react";
+import { Users, MessageSquare, RefreshCw, TrendingUp, Send, Calendar, Mail, Instagram, Facebook, CheckCircle2, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 import { StatCard } from "@/components/stat-card";
 import { SystemHeader } from "@/components/system-header";
 import { PageTransition } from "@/components/page-transition";
@@ -119,6 +120,59 @@ export default function FollowupsPage() {
 
         {/* Drag-and-drop Kanban */}
         <KanbanBoard onFollowUp={handleFollowUp} />
+
+        {/* Social Media Connected */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+          className="card-premium p-6"
+        >
+          <p className="section-label mb-4">Social Media Connected</p>
+          <div className="grid md:grid-cols-2 gap-4 mb-5">
+            <div className="flex items-center gap-3 rounded-xl border border-pink-200 bg-pink-50/50 p-4">
+              <Instagram className="size-5 text-pink-600" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#0F1117]">Instagram</p>
+                <p className="text-xs text-[#9B9BA8]">@skyriseme.lb</p>
+              </div>
+              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <CheckCircle2 className="size-2.5" /> Connected
+              </span>
+            </div>
+            <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/50 p-4">
+              <Facebook className="size-5 text-blue-600" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#0F1117]">Facebook</p>
+                <p className="text-xs text-[#9B9BA8]">SkyRise Me Real Estate</p>
+              </div>
+              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <CheckCircle2 className="size-2.5" /> Connected
+              </span>
+            </div>
+          </div>
+          <p className="text-[10px] text-[#9B9BA8] uppercase tracking-wider mb-3">Scheduled Posts</p>
+          <div className="space-y-2">
+            {[
+              { platform: "Instagram", title: "Achrafieh Penthouse — New Listing", time: "Today 6:00 PM", color: "bg-pink-400" },
+              { platform: "Facebook", title: "Market Update: Beirut Q1 2026", time: "Tomorrow 10:00 AM", color: "bg-blue-400" },
+              { platform: "Instagram", title: "Verdun Villa — Open House", time: "Thu 2:00 PM", color: "bg-pink-400" },
+            ].map((post, i) => (
+              <div key={i} className="flex items-center gap-3 rounded-lg bg-[#F7F8FA] px-4 py-3">
+                <div className={`size-2 rounded-full ${post.color}`} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-[#0F1117] truncate">{post.title}</p>
+                  <p className="text-[10px] text-[#9B9BA8]">{post.platform}</p>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] text-[#9B9BA8]">
+                  <Clock className="size-3" />
+                  {post.time}
+                </div>
+                <span className="text-[10px] font-medium text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">Scheduled</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
 
       <ComposeModal

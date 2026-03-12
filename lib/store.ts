@@ -23,6 +23,10 @@ interface Store {
   notifications: Notification[];
   activityFeed: ActivityItem[];
 
+  // UI
+  sidebarCollapsed: boolean;
+  toggleSidebar: () => void;
+
   // Pipeline
   moveContact: (id: string, stage: PipelineContact["stage"]) => void;
 
@@ -44,6 +48,9 @@ export const useStore = create<Store>((set) => ({
   signals: initialSignals,
   notifications: initialNotifications,
   activityFeed: initialActivity,
+
+  sidebarCollapsed: false,
+  toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
 
   moveContact: (id, stage) =>
     set((state) => ({
